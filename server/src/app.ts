@@ -23,7 +23,7 @@ app.use(cors({
 app.get('/api/users',cors(), (_req: Request, res: Response) => {
   return res
   .status(200)
-  .json({ PRODUCTS: USERS });
+  .json({ Users: USERS });
 });
 
 
