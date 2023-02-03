@@ -1,0 +1,9 @@
+.header__profile{
+    display:flex;
+    justify-content: space-between;
+    border-bottom: 1px solid white;
+    align-items: center;
+}
+.header__icon{
+    padding: 20px;
+}

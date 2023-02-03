@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import User from '../interface/User'
 import { MdArrowBackIos } from 'react-icons/md';
 import userEvent from '@testing-library/user-event';
+import '../styles/UserDetail.css'
 // import '../styles/Product.css'
 
 interface Props {
@@ -25,27 +26,28 @@ export const UserCardDetail = ({data, setData}:Props) => {
       })
 
   return (
-    <main className='container-xl' style={{minHeight: '100vh'}}>
-    <section className='product-container'>
+    <main  style={{minHeight: '100vh'}}>
+    <section className='user-container'>
       {data.filter(user => user.id === param.userid).map((user, index) => {
         return (
-          <article key={index} className='product-article'>
+          <article key={index} className='user-article'>
             <div
               className='back-arrow'
               onClick={()=> navigate(-1)}>
               <MdArrowBackIos/>
-              <p>Back</p>
             </div>
-            <div className='product'>
-              <div className='product-img'>
-                <img className='product-milk-img'
+            <div className='user'>
+              <div>
+                <img className='user-img'
                   src={user.img}
                   alt='Img'/>
               </div >
-              <div className='product-detail'>
-                <p className='product-text'>{user.name}</p>
-                <p className='product-text'>{user.gender}</p>
-                <p className='product-text'>{user.age} Years old</p>
+              <div className='user-detail'>
+                <p className='user-name'>{user.name}</p>
+                <p className='user-text'>{user.gender}</p>
+                <p className='user-text'>{user.age} Years old</p>
+                <p className='user-text'>{user.dsc}</p>
+
                 {/* <button
                   className='order-btn'
                   onClick={()=> {
@@ -59,7 +61,10 @@ export const UserCardDetail = ({data, setData}:Props) => {
                     }>
                     Place Order
                 </button> */}
-                <button  className='order-btn'> Like</button>
+                <div className='userCard-button'>
+                <button  className='like-btn'> Like</button>
+                <button  className='like-btn'> chat</button>
+                </div>
               </div>
             </div>
           </article>

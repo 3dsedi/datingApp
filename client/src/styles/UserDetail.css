@@ -1,0 +1,37 @@
+.user-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+.user{
+   margin-top: 20px;
+
+}
+.user-img{
+    border-radius: 10px;
+}
+.user-detail{
+   margin-top: 10px;
+
+}
+.user-name{
+    font-size: large;
+    margin-bottom: 15px;
+}
+.user-text{
+    color: grey;
+    font-weight: 100;
+    font-size: smaller;
+}
+.like-btn{
+/* margin-left: 25px; */
+margin-top: 10px;
+}
+.userCard-button{
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

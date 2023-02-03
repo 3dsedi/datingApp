@@ -40,7 +40,7 @@ export const Home = ({ data, results, setQuery, setgenderQuery, genderresults} :
          data={data}
         />
          <p className='product-count'>
-        {`${results.length} Matches`}
+        {`${results.length} Matches for you`}
         <IoRefresh
           className='refresh'
           onClick={()=> window.location.reload()}/>

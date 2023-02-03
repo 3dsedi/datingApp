@@ -2,15 +2,22 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import User from "../src/interface/User";
+import Message from "./interface/Message";
 import { Header } from "./components/Header";
 import { Home } from "./components/Home";
 import { UserCardDetail } from "./components/UserCardDetail";
+import { Profile } from "./components/Profile";
 // import State from '../src/interface/State'
+import db from './components/Firebase'
+import { Chats } from "./components/Chats";
+import { ChatScreen } from "./components/ChatScreen";
 
 function App() {
   const [data, setData] = useState<User[]>([]);
   const [query, setQuery] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([])
   const [genderQuery, setgenderQuery] = useState<string>("");
+
 
   const search = (data: User[]) => {
     return data.filter((person: User) =>
@@ -42,17 +49,26 @@ function App() {
     const data = resualt.Users;
     setData(data);
   };
+  const fetchMessages = async () => {
+    const response = await fetch("http://localhost:8000/api/messages");
+    const resualt = await response.json();
+    const messages = resualt.messages;
+    setMessages(messages);
+  };
+  
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+
   return (
     <div>
       <Header />
-      {/* <profile/> */}
-      {/* <filter/> */}
-      {/* <card/> */}
-      {/* <footer/> */}
+      <Profile />
       <Routes>
         <Route
           path="/"
@@ -66,13 +82,20 @@ function App() {
             />
           }
         ></Route>
+        <Route path={`chat/:chatid`} element={<ChatScreen
+        messages={messages}
+        />}></Route>
+        <Route path="/chat" element={<Chats
+        messages={messages}
+        data={data}
+        />}></Route>
+        <Route path="/profile"></Route>
         <Route
           path={`/:userid`}
           element={<UserCardDetail data={data} setData={setData} />}
         />
-        
       </Routes>
-
+ {/* <footer/> */}
     </div>
   );
 }

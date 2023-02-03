@@ -1,12 +1,14 @@
 import express from 'express';
 import { Request, Response, Application } from 'express';
 import  Aplicants  from './Data';
+import Messages from './MessageDb';
 
 
 const bodyParser = require('body-parser')
 const cors = require('cors');
 
  const USERS  = Aplicants
+ const MESSAGES = Messages
 
 
 
@@ -24,6 +26,11 @@ app.get('/api/users',cors(), (_req: Request, res: Response) => {
   return res
   .status(200)
   .json({ Users: USERS });
+});
+app.get('/api/messages',cors(), (_req: Request, res: Response) => {
+  return res
+  .status(200)
+  .json({ messages: MESSAGES });
 });
 
 

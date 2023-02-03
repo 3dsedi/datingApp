@@ -1,8 +1,8 @@
 .header{
-    background-color: palevioletred;
+    background-image: linear-gradient(rgb(243, 193, 201), white);
     color: white;
     text-align: center;
-    height: 60px;
+    height: 40px;
     align-items: center;
     padding: 10px;
 }
