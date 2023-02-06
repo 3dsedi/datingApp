@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Data_1 = __importDefault(require("./Data"));
 const MessageDb_1 = __importDefault(require("./MessageDb"));
+const User_1 = require("./models/User");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const USERS = Data_1.default;
@@ -27,5 +28,11 @@ app.get('/api/messages', cors(), (_req, res) => {
     return res
         .status(200)
         .json({ messages: MESSAGES });
+});
+app.post('/api/users', cors(), (_req, res) => {
+    const { name, gender, age, img, dsc } = _req.body;
+    const newUser = new User_1.User(Date.now().toString(), gender, name, age, img, dsc);
+    USERS.push(newUser);
+    return res.status(201).json({ message: 'user added', Users: USERS });
 });
 exports.default = app;

@@ -2,6 +2,7 @@ import express from 'express';
 import { Request, Response, Application } from 'express';
 import  Aplicants  from './Data';
 import Messages from './MessageDb';
+import { User } from './models/User';
 
 
 const bodyParser = require('body-parser')
@@ -33,6 +34,11 @@ app.get('/api/messages',cors(), (_req: Request, res: Response) => {
   .json({ messages: MESSAGES });
 });
 
-
+app.post('/api/users',cors(), (_req: Request, res: Response) => {
+  const {name,gender,age, img, dsc} = _req.body;
+  const newUser = new User (Date.now().toString(), gender, name, age, img, dsc);
+  USERS.push(newUser);
+  return res.status(201).json({message: 'user added' , Users: USERS })
+});
 
 export default app;

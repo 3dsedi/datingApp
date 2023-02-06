@@ -1,29 +1,105 @@
-import React, {useState, useRef} from "react";
+import React, {useState} from "react";
 import User from "../interface/User";
-import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { IoSearchOutline, IoClose } from 'react-icons/io5';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import { Card } from '../components/Card';
+import { Pages } from "./Pages";
 
 
 interface Props {
-  setQuery: (string: string) => void;
-  setCurrentPage: (number: number) => void;
-  setgenderQuery: (string: string) => void;
   data: User[]
 }
 
-export const Search = ({setQuery, setCurrentPage, setgenderQuery, data } : Props) => {
+export const Search = ({ data } : Props) => {
+  const [selectedGender, setSelectedGender] =  useState<"all" | "male" | "female">("all");
+  const [minAge, setMinAge] = useState<number>(18);
+  const [maxAge, setMaxAge] = useState<number>(90);
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
+
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const cardsPerPage = 1;
+
+  const lastIndex = currentPage * cardsPerPage;
+  const firstIndex = lastIndex - cardsPerPage;
  
+  
+
+  const genderFilterHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGender(event.target.value as "all" | "male" | "female");
+  };
+
+  const ageFilterHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.name === "minAge") {
+      setMinAge(+event.target.value);
+    } else if (event.target.name === "maxAge") {
+      setMaxAge(+event.target.value);
+    }
+  };
+
+  const searchHandler = () => {
+    setIsFiltered(true);
+  };
+
+
+  const filteredData = data
+  .filter((item) => selectedGender === "all" || item.gender === selectedGender)
+  .filter((item) => item.age >= minAge && item.age <= maxAge);
+
+  const currentResults = filteredData.slice(firstIndex, lastIndex);
+
+
   return(
-    <div className="searchbar">
-      <p>Looking for  </p>
-      <input type='text' onClick={() => setCurrentPage(1)}
-           onChange={(e) => setQuery(e.target.value)}/>
-    </div>
+    <article >
+          <form className="filter">
+          <label htmlFor="filter-data">Gender:</label>
+            <select
+              value={selectedGender}
+              defaultValue="select"
+              onChange={genderFilterHandler}
+            >
+              <option value="all">All</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+            </select>
+            <br />
+        <label className="age__lable" htmlFor="minAge">Min Age:</label>
+        <input
+        className="age__input"
+          type="number"
+          name="minAge"
+          value={minAge}
+          onChange={ageFilterHandler}
+        />
+        <br />
+        <label className="age__lable" htmlFor="maxAge">Max Age:</label>
+        <input
+        className="age__input"
+          type="number"
+          name="maxAge"
+          value={maxAge}
+          onChange={ageFilterHandler}
+        />
+          </form>
+          <p className='product-count'>
+            {filteredData.length} matches for you</p>
+          <main className="cardContainer">
+
+          {currentResults.map((user , index) => (
+          <Card key={index} 
+           user={user}/>
+        ))}
+          <section className='pagination'>
+        <Pages
+          totalPages={Math.ceil(filteredData.length/cardsPerPage)}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}/>
+      </section> 
+      
+          </main>
+        </article>
     )
-    };
+  };
+ 
+
+
+
+

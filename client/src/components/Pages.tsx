@@ -11,7 +11,7 @@ export const Pages = ({ totalPages, currentPage, setCurrentPage }: Props) => {
   return (
     <>
       <div
-       className="backward"
+       className="previous-button"
         onClick={() => {
           currentPage === 1
             ? setCurrentPage(1)
@@ -21,7 +21,7 @@ export const Pages = ({ totalPages, currentPage, setCurrentPage }: Props) => {
         <MdArrowBackIos />
       </div>
       <div
-        className='forward'
+        className='next-button'
         onClick={() => {
           currentPage === totalPages
             ? setCurrentPage(totalPages)

@@ -26,14 +26,17 @@ export const Card = ({ user }: Props) => {
       </div>
       <div className="productCard_desc">
         <h6 className="card-title">{user.name}</h6>
-          <p  className="p__amount">{user.age} y/o</p>
+          <p  className="p__age">{user.age} y/o</p>
       </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
       <IconButton>
           <StarRateIcon className="cardicon"/>
       </IconButton>
       <IconButton>
           <FavoriteIcon className="cardicon"/>
       </IconButton>
+
+      </div>
 
     </article>
   );

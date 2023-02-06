@@ -1,66 +1,105 @@
-import React, {useState,useLayoutEffect} from 'react'
-import User from '../interface/User'
-import { IoRefresh } from 'react-icons/io5';
-import { Search } from './Search';
-import '../styles/Home.css'
+import React, {useState} from "react";
+import User from "../interface/User";
 import { Card } from '../components/Card';
-import { Pages } from './Pages';
+import { Pages } from "./Pages";
+
 
 interface Props {
-    results:User[],
-    genderresults: User[]
-    setQuery: (input:string) => void,
-    setgenderQuery: (input:string) => void,
-    data:User[]
+  data: User[]
 }
 
-export const Home = ({ data, results, setQuery, setgenderQuery, genderresults} : Props) => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const cardsPerPage = 1;
-  
-    const lastIndex = currentPage * cardsPerPage;
-    const firstIndex = lastIndex - cardsPerPage;
-    const currentResults = results.slice(firstIndex, lastIndex);
-    const currentResults2 = genderresults.slice(firstIndex, lastIndex);
+export const Home = ({ data } : Props) => {
+  const [selectedGender, setSelectedGender] =  useState<"all" | "male" | "female">("all");
+  const [minAge, setMinAge] = useState<number>(18);
+  const [maxAge, setMaxAge] = useState<number>(90);
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
-    useLayoutEffect(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      })
-    return (
-      <main
-      //  className='container-xl' style={{minHeight: '100vh'}}
-       >
-        <Search
-         setQuery={setQuery}
-         setgenderQuery={setgenderQuery}
-         setCurrentPage={setCurrentPage}
-         data={data}
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const cardsPerPage = 1;
+
+  const lastIndex = currentPage * cardsPerPage;
+  const firstIndex = lastIndex - cardsPerPage;
+ 
+  
+
+  const genderFilterHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGender(event.target.value as "all" | "male" | "female");
+  };
+
+  const ageFilterHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.name === "minAge") {
+      setMinAge(+event.target.value);
+    } else if (event.target.name === "maxAge") {
+      setMaxAge(+event.target.value);
+    }
+  };
+
+  const searchHandler = () => {
+    setIsFiltered(true);
+  };
+
+
+  const filteredData = data
+  .filter((item) => selectedGender === "all" || item.gender === selectedGender)
+  .filter((item) => item.age >= minAge && item.age <= maxAge);
+
+  const currentResults = filteredData.slice(firstIndex, lastIndex);
+
+
+  return(
+    <article >
+          <form className="filter">
+          <label htmlFor="filter-data">Gender:</label>
+            <select
+              value={selectedGender}
+              defaultValue="select"
+              onChange={genderFilterHandler}
+            >
+              <option value="all">All</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+            </select>
+            <br />
+        <label className="age__lable" htmlFor="minAge">Min Age:</label>
+        <input
+        className="age__input"
+          type="number"
+          name="minAge"
+          value={minAge}
+          onChange={ageFilterHandler}
         />
-         <p className='product-count'>
-        {`${results.length} Matches for you`}
-        <IoRefresh
-          className='refresh'
-          onClick={()=> window.location.reload()}/>
-      </p>
-      <section  className="cardContainer">
-          {currentResults.map((user, index) => {
-            return (
-              <Card
-                user={user}
-                key={index}/>
-              )
-            })
-          }
-           </section> 
-           <section className='pagination'>
+        <br />
+        <label className="age__lable" htmlFor="maxAge">Max Age:</label>
+        <input
+        className="age__input"
+          type="number"
+          name="maxAge"
+          value={maxAge}
+          onChange={ageFilterHandler}
+        />
+          </form>
+          <p className='product-count'>
+            {filteredData.length} matches for you</p>
+          <main className="cardContainer">
+
+          {currentResults.map((user , index) => (
+          <Card key={index} 
+           user={user}/>
+        ))}
+          <section className='pagination'>
         <Pages
-          totalPages={Math.ceil(results.length/cardsPerPage)}
+          totalPages={Math.ceil(filteredData.length/cardsPerPage)}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}/>
-      </section>
-      </main>
-  )
-}
+      </section> 
+      
+          </main>
+        </article>
+    )
+  };
+ 
+
+
+
+

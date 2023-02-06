@@ -5,6 +5,7 @@ import "../styles/Profile.css";
 import { IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import PersonAddAltSharpIcon from '@mui/icons-material/PersonAddAltSharp';
 
 export const Profile = () => {
   return (
@@ -15,9 +16,9 @@ export const Profile = () => {
       </IconButton>
         </Link>
 
-      <Link to='/'>
+      <Link to='/signup'>
       <IconButton>
-        <PersonSearchIcon className="header__icon" sx={{ fontSize: 40 }} />
+        <PersonAddAltSharpIcon className="header__icon" sx={{ fontSize: 40 }} />
       </IconButton>
       </Link>
 

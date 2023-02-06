@@ -7,59 +7,58 @@ import { Header } from "./components/Header";
 import { Home } from "./components/Home";
 import { UserCardDetail } from "./components/UserCardDetail";
 import { Profile } from "./components/Profile";
-// import State from '../src/interface/State'
-import db from './components/Firebase'
 import { Chats } from "./components/Chats";
 import { ChatScreen } from "./components/ChatScreen";
+import { AddUser } from "./components/AddUser";
 
 function App() {
   const [data, setData] = useState<User[]>([]);
-  const [query, setQuery] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([])
-  const [genderQuery, setgenderQuery] = useState<string>("");
+  
+  const userAddHandler = async (enteredUser: {
+    name: string;
+    gender: string;
+    age: number;
+    img: string;
+    dsc: string;
+  }) => {
+    const { name, gender, age , img, dsc} = enteredUser;
+    const reqBody = { name, gender, age  , dsc, img, id: Date.now().toString()};
+    const response = await fetch("http://localhost:8000/api/users", {
+      mode: 'no-cors',
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(reqBody),
+      
+    });
 
-
-  const search = (data: User[]) => {
-    return data.filter((person: User) =>
-      person.gender.toLowerCase().includes(query.toLowerCase())
-    );
+    if (response.status === 201) {
+      console.log(enteredUser)
+      const result = await response.json();
+      console.log(result)
+      setData(result.Users);
+    }
+      
   };
-  const genderSearch = (data: User[]) => {
-    const gender = data.filter((person: User) => person.gender === genderQuery);
-    console.log();
-    return gender;
-  };
-
-  // const genderTypes = (data:User[]) => {
-  //   const allGender = data.map(person => person.gender);
-  //   const gender = allGender.filter((gender, index) => {
-  //     return allGender.indexOf(gender) === index;
-  //   });
-  //   return gender;
-  // }
-
-  // const FilterHandler = (data: User[]) => {
-  //   const result = data.filter((person: User) => person.gender === query)
-  //   return result
-  //   }
-
+   
   const fetchData = async () => {
     const response = await fetch("http://localhost:8000/api/users");
     const resualt = await response.json();
     const data = resualt.Users;
     setData(data);
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const fetchMessages = async () => {
     const response = await fetch("http://localhost:8000/api/messages");
     const resualt = await response.json();
     const messages = resualt.messages;
     setMessages(messages);
   };
-  
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -74,22 +73,19 @@ function App() {
           path="/"
           element={
             <Home
-              setQuery={setQuery}
-              setgenderQuery={setgenderQuery}
-              results={search(data)}
-              genderresults={genderSearch(data)}
               data={data}
             />
           }
         ></Route>
-        <Route path={`chat/:chatid`} element={<ChatScreen
-        messages={messages}
-        />}></Route>
         <Route path="/chat" element={<Chats
         messages={messages}
         data={data}
         />}></Route>
         <Route path="/profile"></Route>
+        <Route path="/signup" element={<AddUser addUser={userAddHandler}/>}></Route>
+        <Route path={`chat/:chatid`} element={<ChatScreen
+        messages={messages}
+        />}></Route>
         <Route
           path={`/:userid`}
           element={<UserCardDetail data={data} setData={setData} />}
