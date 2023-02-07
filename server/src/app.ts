@@ -44,7 +44,7 @@ app.get('/api/messages',cors(), (_req: Request, res: Response) => {
 
 app.post('/api/users',cors(), (_req: Request, res: Response) => {
   const {name,gender,age, img, dsc} = _req.body;
-  const newUser = new User (id, gender, name, age, img, dsc);
+  const newUser = new User (Date.now().toString(), gender, name, age, img, dsc);
   USERS.push(newUser);
   return res.status(201).json({message: 'user added' , Users: USERS })
 });

@@ -24,6 +24,7 @@ export const Home = ({ data } : Props) => {
 
   const genderFilterHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGender(event.target.value as "all" | "male" | "female");
+    
   };
 
  

@@ -16,7 +16,7 @@ function App() {
   const [data, setData] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([])
 
-  const id = uuidv4()
+  // const id = uuidv4()
   
   const userAddHandler = async (enteredUser: {
     name: string;
@@ -27,7 +27,7 @@ function App() {
   }) => { 
     const { name, gender, age , img, dsc} = enteredUser;
     console.log(enteredUser)
-    const reqBody = { name, gender, age  , dsc, img, id};
+    const reqBody = { name, gender, age  , dsc, img, id:Date.now().toString()};
     console.log(reqBody)
     try {
       const response = await fetch("http://localhost:8000/api/users", {
@@ -50,31 +50,10 @@ function App() {
     } catch (error) {
       console.error(error);
     }
-
-
-//     const response = await fetch("http://localhost:8000/api/users", {
-//       mode: 'no-cors',
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json; charset=utf-8",
-//       },
-//       body: JSON.stringify(reqBody),
-      
-//     });
-
-//     if (response.status === 201) {
-//       console.log(enteredUser+'user')
-//       const result = await response.json();
-//       console.log(result+'result')
-//       setData(result.Users);
-      
-//     }
       
  };
    
-//  const userAddHandler = ()=> {
-//   console.log('added')
-//  }
+
   const fetchData = async () => {
     const response = await fetch("http://localhost:8000/api/users");
     const resualt = await response.json();
