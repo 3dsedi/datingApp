@@ -2,6 +2,8 @@ import React,{useRef} from 'react'
 import User from '../interface/User'
 import { MdArrowBackIos } from 'react-icons/md';
 import {  useNavigate } from 'react-router-dom';
+
+
 interface Props{
 addUser:(enteredUser: {name: string; gender: string; age: number; img: string, dsc: string}) => void
 } 
@@ -25,11 +27,12 @@ export const AddUser = ({addUser}: Props) => {
         const dataURL = e.target?.result as string;
         const enteredUser = {
           img: dataURL,
-          name: nameInputRef.current?.value || '',
-          age: parseInt(ageInputRef.current?.value || '18', 100),
-          gender: genderInputRef.current?.value || '',
-          dsc: dscInputRef.current?.value || '',
-        };
+          name: nameInputRef.current!.value ,
+          age: +(ageInputRef.current!.value),
+          gender: genderInputRef.current!.value ,
+          dsc: dscInputRef.current!.value ,
+        }
+        console.log(enteredUser)
         addUser(enteredUser);
       };
 

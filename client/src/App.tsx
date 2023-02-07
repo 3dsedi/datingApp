@@ -10,10 +10,13 @@ import { Profile } from "./components/Profile";
 import { Chats } from "./components/Chats";
 import { ChatScreen } from "./components/ChatScreen";
 import { AddUser } from "./components/AddUser";
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [data, setData] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([])
+
+  const id = uuidv4()
   
   const userAddHandler = async (enteredUser: {
     name: string;
@@ -21,32 +24,62 @@ function App() {
     age: number;
     img: string;
     dsc: string;
-  }) => {
+  }) => { 
     const { name, gender, age , img, dsc} = enteredUser;
-    const reqBody = { name, gender, age  , dsc, img, id: Date.now().toString()};
-    const response = await fetch("http://localhost:8000/api/users", {
-      mode: 'no-cors',
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(reqBody),
+    console.log(enteredUser)
+    const reqBody = { name, gender, age  , dsc, img, id};
+    console.log(reqBody)
+    try {
+      const response = await fetch("http://localhost:8000/api/users", {
+        mode: 'cors',
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
       
-    });
-
-    if (response.status === 201) {
-      console.log(enteredUser)
-      const result = await response.json();
-      console.log(result)
-      setData(result.Users);
+      });
+      console.log(response)
+    
+      if (response.status === 201) {
+        console.log(enteredUser + 'user')
+        const result = await response.json();
+        console.log(result + 'result')
+        setData(result.Users);
+      }
+    } catch (error) {
+      console.error(error);
     }
+
+
+//     const response = await fetch("http://localhost:8000/api/users", {
+//       mode: 'no-cors',
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json; charset=utf-8",
+//       },
+//       body: JSON.stringify(reqBody),
       
-  };
+//     });
+
+//     if (response.status === 201) {
+//       console.log(enteredUser+'user')
+//       const result = await response.json();
+//       console.log(result+'result')
+//       setData(result.Users);
+      
+//     }
+      
+ };
    
+//  const userAddHandler = ()=> {
+//   console.log('added')
+//  }
   const fetchData = async () => {
     const response = await fetch("http://localhost:8000/api/users");
     const resualt = await response.json();
     const data = resualt.Users;
+    console.log(data)
     setData(data);
   };
   useEffect(() => {

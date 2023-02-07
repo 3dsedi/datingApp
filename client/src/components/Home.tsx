@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import User from "../interface/User";
 import { Card } from '../components/Card';
 import { Pages } from "./Pages";
@@ -12,7 +12,6 @@ export const Home = ({ data } : Props) => {
   const [selectedGender, setSelectedGender] =  useState<"all" | "male" | "female">("all");
   const [minAge, setMinAge] = useState<number>(18);
   const [maxAge, setMaxAge] = useState<number>(90);
-  const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -27,6 +26,8 @@ export const Home = ({ data } : Props) => {
     setSelectedGender(event.target.value as "all" | "male" | "female");
   };
 
+ 
+
   const ageFilterHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.name === "minAge") {
       setMinAge(+event.target.value);
@@ -35,9 +36,6 @@ export const Home = ({ data } : Props) => {
     }
   };
 
-  const searchHandler = () => {
-    setIsFiltered(true);
-  };
 
 
   const filteredData = data
